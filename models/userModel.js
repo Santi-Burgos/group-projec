@@ -2,7 +2,7 @@ import connection from '../config/database.js'
 
 class User{
     static async createUser({address_mail, user, hashedPassword}){
-        const query = 'INSERT INTO users(address_mail, user, password)VALUES(?,?,?)'
+        const query = 'INSERT INTO users(address_mail, username, password)VALUES ($1, $2, $3)'
         const [result] = await connection.query(query,[address_mail, user, hashedPassword]);
         return result 
     }
