@@ -17,12 +17,12 @@ export const registerUser = async (req, res) => {
         }
 
 
-        const { address_mail, user, password } = req.body;
+        const { address_mail, username, password } = req.body;
 
         console.log(password)
 
         const hashedPassword = await hashPassword(password);
-        const userCreate = await User.createUser({address_mail, user, hashedPassword});
+        const userCreate = await User.createUser({address_mail, username, hashedPassword});
         res.status(201).json(userCreate);
     } catch (err) {
         res.status(401).json({ message: err.message });
