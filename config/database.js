@@ -4,14 +4,19 @@ import { config as configDotenv } from 'dotenv';
 configDotenv();
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL, // URL completa desde Neon
+  connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false, // necesario para conexión segura en Neon
+    rejectUnauthorized: false, 
   },
 });
 
+// Verificación de conexión
 pool.connect()
-  .then(() => console.log('Conexión a PostgreSQL realizada con éxito'))
-  .catch((err) => console.error('No se pudo conectar a PostgreSQL', err));
+  .then(() => {
+    console.log(`✅ Conectado a PostgreSQL en Neon. Base de datos: ${process.env.DB_NAME}`);
+  })
+  .catch((err) => {
+    console.error('❌ Error al conectar a PostgreSQL:', err);
+  });
 
 export default pool;
