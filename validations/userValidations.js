@@ -5,7 +5,7 @@ const userSchema = z.object({
         required_error: 'Email is required',
         invalid_type_error: 'Email invalid, example@gmail.com'
     }),
-    user: z.string().min(5, {
+    username: z.string().min(5, {
         message: 'Username must be at least 5 characters long',
         required_error: 'Username is required',
     }).max(20, {
