@@ -13,7 +13,8 @@ export const loginUser = async (req, res) =>{
     try{
         const {address_mail, password} = req.body;
         const loggearUser = await User.findByUSer({address_mail});
-        
+
+
         if(!loggearUser){
             res.status(400).json('usuario no encontrado');
         }

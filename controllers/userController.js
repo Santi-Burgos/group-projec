@@ -8,13 +8,19 @@ export const registerUser = async (req, res) => {
     try {
 
         const validationResult = validateUser(req.body);
+        console.log(validationResult)
 
         if (validationResult.error) {
             return res.status(400).json({ 
                 message: 'Validation error', 
                 details: validationResult.error });
         }
+
+
         const { address_mail, user, password } = req.body;
+
+        console.log(password)
+
         const hashedPassword = await hashPassword(password);
         const userCreate = await User.createUser({address_mail, user, hashedPassword});
         res.status(201).json(userCreate);
@@ -44,7 +50,6 @@ export const editUser = async (req, res)=>{
         console.log(req.body)
         
         const userPasswordOld = await User.findByUSer({address_mail: addressMailCurrent})
-
         
         console.log( 'Old password:', userPasswordOld.password)
 
@@ -71,12 +76,8 @@ export const deleteUserController = async(req, res) =>{
         const addressMailCurrent = req.user.address_mail
         const {currentPassword} = req.body;
 
-        console.log(currentPassword)
-
         const userPassword = await User.findByUSer({address_mail: addressMailCurrent})
         
-        console.log( 'Old password:', userPassword.password)
-
         const isMatch = await bcrypt.compare(currentPassword, userPassword.password);
         if(!isMatch){
             return res.status(400).json('Contrasenha incorrecta');
