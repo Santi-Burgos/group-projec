@@ -29,7 +29,7 @@ class User{
 
     static async getUser(userID){
         try{
-            const queryGetUser = 'SELECT `address_mail`, `user` FROM `users` WHERE id_users = $1';
+            const queryGetUser = 'SELECT `address_mail`, `username` FROM `users` WHERE id_users = $1';
             const results = await connection.query(queryGetUser, [userID]);
             return results 
         }catch(error){
@@ -39,7 +39,7 @@ class User{
 
     static async editUser({address_mail, user, hashedPassword, userID}){
         try{
-            const query = 'UPDATE users SET address_mail = $1, "user" = $2, password = $3 WHERE id_users = $4';
+            const query = 'UPDATE users SET address_mail = $1, "username" = $2, password = $3 WHERE id_users = $4';
             const editUser = await connection.query(query,[address_mail, user, hashedPassword, userID])
             return editUser.rows[0];
         }catch(error){

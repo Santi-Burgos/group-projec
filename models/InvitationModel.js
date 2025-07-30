@@ -6,7 +6,7 @@ class Invitation {
         try {
             const query = `
                 SELECT 
-                    users.user,
+                    users.username,
                     group_data.group_name,
                     group_invitation.*
                 FROM group_invitation

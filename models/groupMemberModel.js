@@ -6,7 +6,7 @@ class groupMembers {
 
     static async getMembersAll({groupID}){
         try{
-            const queryGetMembers = 'SELECT users.address_mail, users.user, group_members.* FROM group_members JOIN users ON group_members.id_users = users.id_users WHERE group_members.id_group = $1;'
+            const queryGetMembers = 'SELECT users.address_mail, users.username, group_members.* FROM group_members JOIN users ON group_members.id_users = users.id_users WHERE group_members.id_group = $1;'
             const results = await connection.query(queryGetMembers, [groupID]);
             return results.rows[0] 
         }catch(error){

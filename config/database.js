@@ -9,7 +9,6 @@ configDotenv();
 //     rejectUnauthorized: false, 
 //   },
 // });
-
 const pool = new Pool({
   host: 'localhost',
   port: '5432',
