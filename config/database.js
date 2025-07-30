@@ -10,12 +10,15 @@ const pool = new Pool({
   },
 });
 
-pool.connect()
-  .then(() => {
+(async () => {
+  try {
+    const client = await pool.connect();
     console.log(`✅ Conectado a PostgreSQL en Neon. Base de datos: ${process.env.DB_NAME}`);
-  })
-  .catch((err) => {
+    client.release(); // 🔑 Muy importante
+  } catch (err) {
     console.error('❌ Error al conectar a PostgreSQL:', err);
-  });
+  }
+})();
+
 
 export default pool;
