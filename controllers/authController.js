@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import { cookies } from "../utils/cookies.js";
 
 
-
+configDotenv();
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export const loginUser = async (req, res) =>{
