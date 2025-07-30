@@ -4,13 +4,14 @@ class User{
     static async createUser({ address_mail, user, hashedPassword }) {
         const query = 'INSERT INTO users(address_mail, username, password) VALUES ($1, $2, $3)';
         const result = await connection.query(query, [address_mail, user, hashedPassword]);
-        return result; // es un objeto, no un array
+        return result;
     }
 
     static async findByUSer({address_mail}){
         try{ 
             const query = 'SELECT * FROM users WHERE address_mail = $1';
-            const findUser = await connection.query(query, address_mail)
+            const findUser = await connection.query(query, [address_mail])
+
             return findUser.rows[0]
         }catch(error){
             throw new Error('Error al buscar el usuario' + error.message)
@@ -29,7 +30,7 @@ class User{
 
     static async getUser(userID){
         try{
-            const queryGetUser = 'SELECT `address_mail`, `username` FROM `users` WHERE id_users = $1';
+            const queryGetUser = 'SELECT address_mail, username FROM users WHERE id_users = $1';
             const results = await connection.query(queryGetUser, [userID]);
             return results 
         }catch(error){
@@ -39,7 +40,8 @@ class User{
 
     static async editUser({address_mail, user, hashedPassword, userID}){
         try{
-            const query = 'UPDATE users SET address_mail = $1, "username" = $2, password = $3 WHERE id_users = $4';
+            const query = `UPDATE users SET address_mail = $1, username = $2, password = $3 
+                    WHERE id_users = $4`;
             const editUser = await connection.query(query,[address_mail, user, hashedPassword, userID])
             return editUser.rows[0];
         }catch(error){
@@ -49,7 +51,8 @@ class User{
 
     static async deleteUser(userID){
         try{
-            const query = 'DELETE FROM users WHERE id_users = $1'
+            const query = `DELETE FROM users 
+                            WHERE id_users = $1`
             const result = await connection.query(query, [userID])
             return result
         }catch(error){

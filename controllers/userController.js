@@ -15,9 +15,8 @@ export const registerUser = async (req, res) => {
                 details: validationResult.error });
         }
 
-
         const { address_mail, username, password } = req.body;
-        
+
         const hashedPassword = await hashPassword(password);
         const userCreate = await User.createUser({address_mail, username, hashedPassword});
         res.status(201).json(userCreate);
@@ -32,7 +31,7 @@ export const getUser = async(req, res) =>{
         const getUser = await User.getUser(userID);
         res.status(201).json(getUser)
     }catch(error){
-        res.status(400).json({messag: err.message})
+        res.status(400).json({messag: error.message})
     }
 }
 

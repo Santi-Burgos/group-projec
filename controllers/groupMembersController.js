@@ -6,8 +6,6 @@ export const getMembersGroupController = [
             const userID = req.user.id_user;
             const groupID = req.query.groupID;
             
-            console.log('frontend:', req.query)
-            
             const takeMembersGroup = await groupMembers.getMembersAll({userID, groupID});
             res.status(200).json(takeMembersGroup);
         }catch(error){

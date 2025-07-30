@@ -1,7 +1,5 @@
 import Group from "../models/groupModel.js"; 
 import {ascendOwnerMember, deleteGroupNull, autoDeleteGroup} from "../models/autoDeleteGroupUtil.js";
-import  {upload} from '../middlewares/uploadsMiddleware.js'
-import { validateGroup } from "../validations/groupValidations.js";
 
 
 export const getGroups = [
@@ -59,7 +57,6 @@ export const quitGroup = [
 
             const getRowsGroups = await autoDeleteGroup(groupID)
 
-            console.log('records retornados:', getRowsGroups)
             if(getRowsGroups == 0){
                 await deleteGroupNull(groupID)
             }else{

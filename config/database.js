@@ -3,22 +3,32 @@ import { config as configDotenv } from 'dotenv';
 
 configDotenv();
 
+// const pool = new Pool({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: {
+//     rejectUnauthorized: false, 
+//   },
+// });
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false, 
-  },
-});
+  host: 'localhost',
+  port: '5432',
+  database: 'grupos_db',
+  user: 'postgres',
+  password: 'Burgospg'
+})
 
-(async () => {
+async function testConnection() {
   try {
     const client = await pool.connect();
-    console.log(`Conectado a PostgreSQL en Neon. Base de datos: ${process.env.DB_NAME}`);
-    client.release(); 
+    console.log(`Conectado a PostgreSQL. Base de datos local: grupos_db`);
+    client.release();
   } catch (err) {
     console.error('Error al conectar a PostgreSQL:', err);
   }
-})();
+}
+
+testConnection();
+
 
 
 export default pool;

@@ -1,13 +1,15 @@
 import  connection  from "../config/database.js";
-import invitationUtil from "./invitationUtil.js";
 
 
 class Group{
-
     static async getAllGroup({ userID }) {
         try { 
-            const query = 'SELECT `group_data`.*, `group_img`.* FROM `group_data`  JOIN `group_members` ON `group_members`.id_group = `group_data`.id_group LEFT JOIN `group_img` ON `group_img`.id_group = `group_data`.id_group  WHERE `group_members`.id_users = $1';
+            const query = `SELECT group_data.*, group_img.* FROM group_data  
+                JOIN group_members ON group_members.id_group = group_data.id_group 
+                LEFT JOIN group_img ON group_img.id_group = group_data.id_group  
+                WHERE group_members.id_users = $1`;
             const {rows} = await connection.query(query, [ userID]); 
+
             return rows;
         } catch (error) {
             console.error('Error en getAllGroup:', error.message); 
@@ -16,7 +18,7 @@ class Group{
     }
     
 static async createGroup({ group_name, group_description, address_mail, imgName, urlImg, userID }) {
-    const conn = await connection.connect(); // PG pool
+    const conn = await connection.connect();
     try {
         await conn.query('BEGIN');
 
@@ -31,12 +33,14 @@ static async createGroup({ group_name, group_description, address_mail, imgName,
         const rolID = 1;
 
         await conn.query(
-            'INSERT INTO group_members(joined_at, id_rol, id_group, id_users) VALUES (NOW(), $1, $2, $3)',
+            `INSERT INTO group_members(joined_at, id_rol, id_group, id_users) 
+                VALUES (NOW(), $1, $2, $3)`,
             [rolID, groupID, userID]
         );
 
         await conn.query(
-            'INSERT INTO group_img(img_name, url_img, id_group) VALUES ($1, $2, $3)',
+            `INSERT INTO group_img(img_name, url_img, id_group) 
+                VALUES ($1, $2, $3)`,
             [imgName, urlImg, groupID]
         );
 
@@ -67,7 +71,7 @@ static async createGroup({ group_name, group_description, address_mail, imgName,
 
     static async quitGroup({groupID, userID}){
         try{
-            const query = 'DELETE FROM `group_members` WHERE id_users = $1 AND id_group = $2';
+            const query = 'DELETE FROM group_members WHERE id_users = $1 AND id_group = $2';
             const results = await connection.query(query, [userID, groupID] )
             return results.rows[0]; 
         }catch(error){

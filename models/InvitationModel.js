@@ -1,5 +1,4 @@
 import connection from "../config/database.js";
-import invitationUtil from "./invitationUtil.js";
 
 class Invitation {
     static async getAllNotification({ userID }) {
@@ -29,14 +28,16 @@ class Invitation {
                 VALUES (NOW(), 3, $1, $2)
             `;
             await connection.query(query, [groupID, userID]);
-            return { success: true };
+            return { 
+                success: true 
+            };
         } catch (error) {
             console.log('Error en acceptedInvitation:', error.message);
             throw new Error('Error al aceptar la invitación');
         }
     }
 
-    static async rejectedInvitation({ groupID, userID }) {
+    static async deleteInvitation({ groupID, userID }) {
         try {
             const query = `
                 DELETE FROM group_invitation
@@ -50,13 +51,30 @@ class Invitation {
         }
     }
 
-    static async sendInvitation({ groupID, address_mail, userID }) {
+    static async sendInvitation({ groupID, userID, invitedBy, statusID }) {
         try {
-            const result = await invitationUtil(groupID, address_mail, userID);
-            return result;
+            const queryInsertInvited = 'INSERT INTO group_invitation(id_group, id_users, invited_by, id_status) VALUES ($1, $2, $3, $4)';
+            const resultSendInvitation = await connection.query(queryInsertInvited, [groupID, userID, invitedBy, statusID]);
+
+            return {
+                data: resultSendInvitation
+            }
+
         } catch (error) {
             console.log('Error en sendInvitation:', error.message);
             throw new Error('Error al crear invitación');
+        }
+    }
+
+    static async validateInvitation(id_users, groupID){
+        try{
+            const getInvitation = `SELECT * FROM group_invitation
+                WHERE id_users = $1 AND id_group = $2`   
+            const resultValidation  = await connection.query(getInvitation, [id_users, groupID])
+
+            return resultValidation.rows[0]
+        }catch(error){
+            throw new Error('Error al validar invitaciones' + error.message)
         }
     }
 }
