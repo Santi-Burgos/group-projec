@@ -1,8 +1,8 @@
 import Invitation from "../models/InvitationModel.js";
 import User from "../models/userModel.js"
+import Group from "../models/groupModel.js";
 
 export const getNotification = [
-    
     async (req, res)=> {
     try{
         const userID = req.user.id_user
@@ -39,6 +39,14 @@ export const createInvitation = [
             const userID = getUserID.id_users;
             const statusID = 1;
             
+
+            const getIdMembers = await Group.getUserForGroup(groupID);
+            const memberIDs = getIdMembers.map(m => m.id_users);
+
+            if (memberIDs.includes(userID)) {
+                throw new Error('El usuario que intentas invitar ya pertenece al grupo');
+            }
+
             // valido que no haya otra invitacion
             const validateNotification = await Invitation.validateInvitation(userID, groupID);
             if(validateNotification){

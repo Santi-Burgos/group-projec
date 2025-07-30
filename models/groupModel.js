@@ -79,5 +79,18 @@ static async createGroup({ group_name, group_description, address_mail, imgName,
             throw new Error('Error al abandonar el grupo')
         }     
     }
+
+    static async getUserForGroup(groupID){
+        try{
+            const getParticipants = `
+            SELECT id_users FROM group_members 
+                WHERE id_group = $1
+            `
+            const resultPartipants = await connection.query(getParticipants, [groupID]);
+            return resultPartipants.rows
+        }catch(error){
+            throw new Error('Error al obtener los grupos de ese usuario')
+        }
+    }
 };
 export default Group    
