@@ -6,7 +6,7 @@ class Message {
       SELECT 
         group_data.*, 
         group_img.url_img, 
-        users.user, 
+        users.username, 
         msg_group.* 
       FROM group_data 
       LEFT JOIN group_img ON group_img.id_group = group_data.id_group 
