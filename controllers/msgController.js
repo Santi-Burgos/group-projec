@@ -18,7 +18,6 @@ export const sendMessage = [
     async (req, res) =>{
         try{
             const userID = req.user.id_user
-            console.log(req.body)
             const {msg_body, groupID} = req.body
             const postMessage = await Message.sendMessage({
                     userID, 

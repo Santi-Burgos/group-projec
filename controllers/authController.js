@@ -10,43 +10,43 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 export const loginUser = async (req, res) =>{
 
-    try{
-        const {address_mail, password} = req.body;
-        const loggearUser = await User.findByUSer({address_mail});
+    try {
+        const { address_mail, password } = req.body;
+        const loggearUser = await User.findByUSer({ address_mail });
 
-
-        if(!loggearUser){
-            res.status(400).json('usuario no encontrado');
+        if (!loggearUser) {
+            console.log('Usuario no encontrado');
+            return res.status(404).json({ error: 'Usuario no encontrado' }); 
         }
+
         const isMatch = await bcrypt.compare(password, loggearUser.password);
 
-        if(!isMatch){
-            res.status(400).json('Contraseña incorrecta');
+        if (!isMatch) {
+            return res.status(400).json({ error: 'Contraseña incorrecta' }); 
         }
-        
-        const id_user = loggearUser.id_users
 
-        const token = jwt.sign({
-            id_user,
-            address_mail
-        }, 
+        const id_user = loggearUser.id_users;
+
+        const token = jwt.sign(
+            {
+                id_user,
+                address_mail,
+            },
             JWT_SECRET,
-            {expiresIn: '1h'}
+            { expiresIn: '1h' }
         );
-        res
-        .cookie(
-            'access_token', 
-            token, 
-            cookies)
-        res.send({
+
+        res.cookie('access_token', token, cookies);
+        return res.send({
             success: true,
             address_mail: loggearUser.address_mail,
             token: token,
         });
-    }catch(error){
-        console.log(error)
-        res.status(400).json('Usuario no encontrado');
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Error en el servidor' }); 
     }
+
 }
 
 export const logoutUser = async(req, res)=>{
