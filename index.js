@@ -21,11 +21,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const server = http.createServer(app)
 const io = new WebSocketServer(server,{
-    cors:{
-        origin: 'http://localhost:3001',
-        methods: ["GET, POST"],
-        credentials: true,
+    cors: {
+    origin: ['http://localhost:3001', 'https://chatgrupal.netlify.app'],
+    methods: ['GET', 'POST'], 
+    credentials: true
     }
+
 })
 
 app.use((req, res, next) => {
