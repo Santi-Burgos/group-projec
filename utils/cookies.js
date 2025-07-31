@@ -1,6 +1,6 @@
 export const cookies = {
   httpOnly: true,
-  secure: true,        // ✅ obligatorio si usás sameSite: 'none'
+  secure: true,        
   sameSite: 'none',
   path: '/',
   maxAge: 3600000
