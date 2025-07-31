@@ -3,5 +3,6 @@ export const cookies = {
   secure: true,        
   sameSite: 'none',
   path: '/',
-  maxAge: 3600000
+  maxAge: 3600000,
+  domain: 'https://chatgrupal.netlify.app'
 }
