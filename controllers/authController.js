@@ -40,7 +40,6 @@ export const loginUser = async (req, res) =>{
         return res.send({
             success: true,
             address_mail: loggearUser.address_mail,
-            token: token,
         });
     } catch (error) {
         console.log(error);

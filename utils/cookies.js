@@ -4,5 +4,5 @@ export const cookies = {
   sameSite: 'none',
   path: '/',
   maxAge: 3600000,
-  domain: 'https://chatgrupal.netlify.app'
+  domain: 'chatgrupal.netlify.app'
 }
