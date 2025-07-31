@@ -12,8 +12,6 @@ export const authToken = async (req, res, next) => {
         });
     }
 
-
-
     let decoded;
     try {
         decoded = verifyToken(token);
