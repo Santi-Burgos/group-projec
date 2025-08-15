@@ -3,18 +3,19 @@ import User from '../models/userModel.js';
 import { verifyToken } from '../utils/decodedUtil.js';
 
 export const authToken = async (req, res, next) => {
-    const token = req.cookies.access_token;
+    const authHeader = req.get('Authorization');
+    const token = req.cookies.access_token || authHeader && authHeader.split(' ')[1];
 
     if (!token) {
         return res.status(401).json({
             message: 'No token provided',
-            details: 'El token de acceso no está presente en las cookies',
+            details: 'El token de acceso no está presente en el header Authorization',
         });
     }
 
     let decoded;
     try {
-        decoded = verifyToken(token);
+        decoded = verifyToken(token); 
     } catch (error) {
         return res.status(401).json({
             message: 'Invalid token',
@@ -31,12 +32,11 @@ export const authToken = async (req, res, next) => {
 
     req.user = decoded;
 
-    const user = await User.findById({userID: decoded.id_user});
-
-
+    // Buscar usuario en la DB
+    const user = await User.findById(decoded.id_user);
     if (!user) {
-      return res.status(401).json({ message: 'El usuario ya no existe' });
+        return res.status(401).json({ message: 'El usuario ya no existe' });
     }
 
-    next(); 
+    next();
 };

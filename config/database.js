@@ -10,6 +10,14 @@ const pool = new Pool({
   },
 });
 
+// const pool = new Pool({
+//   host: 'localhost',
+//   port: '5432',
+//   database: 'grupos_db',
+//   user: 'postgres',
+//   password: 'Burgospg'
+// })
+
 async function testConnection() {
   try {
     const client = await pool.connect();
