@@ -1,6 +1,6 @@
 import Group from "../models/groupModel.js"; 
 import {ascendOwnerMember, deleteGroupNull, autoDeleteGroup} from "../models/autoDeleteGroupUtil.js";
-
+import cloudinary from "../utils/cloudinary.js";
 
 export const getGroups = [
     async (req, res) => {
@@ -23,28 +23,49 @@ export const getGroups = [
     },
 ];
 export const createGroup = [
-    async(req, res) =>{
-        try{
+  async (req, res) => {
+    try {
+      const userID = req.user.id_user;
+      const { group_name, group_description, address_mail } = req.body;
 
-            const userID = req.user.id_user;
-            const {group_name, group_description, address_mail} = req.body
+      let imgName = null;
+      let urlImg = null;
 
-            const imgName = req.file ? req.file.filename : null;
-            const urlImg = req.file ? `http://localhost:3000/uploads/${req.file.filename}` : null;
-
-            const groupCreate = await Group.createGroup({
-                group_name, 
-                group_description,
-                address_mail,
-                userID,
-                imgName, 
-                urlImg,});
-            res.status(201).json(groupCreate);
-        }catch (err) {
-            console.error("Error al crear grupo:", err);
-            res.status(400).json({ message: err.message });
-          }
+      if (req.file) {
+        try {
+            const result = await new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                { folder: "groups" },
+                (error, result) => {
+                if (error) return reject(error);
+                resolve(result);
+                }
+            );
+            stream.end(req.file.buffer);
+            });
+            imgName = result.public_id;
+            urlImg = result.secure_url;
+        } catch (error) {
+            
+            throw new Error("Error al subir imagen a Cloudinary: " + error.message);
+        }
     }
+
+      const groupCreate = await Group.createGroup({
+        group_name,
+        group_description,
+        address_mail,
+        userID,
+        imgName,
+        urlImg,
+      });
+
+      res.status(201).json(groupCreate);
+    } catch (err) {
+      console.error("Error al crear grupo:", err);
+      res.status(400).json({ message: err.message });
+    }
+  }
 ];
 
 export const quitGroup = [
