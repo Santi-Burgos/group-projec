@@ -3,20 +3,20 @@ import { config as configDotenv } from 'dotenv';
 
 configDotenv();
 
-// const pool = new Pool({
-//   connectionString: process.env.DATABASE_URL,
-//   ssl: {
-//     rejectUnauthorized: false, 
-//   },
-// });
-
 const pool = new Pool({
-  host: 'localhost',
-  port: '5432',
-  database: 'grupos_db',
-  user: 'postgres',
-  password: 'Burgospg'
-})
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, 
+  },
+});
+
+// const pool = new Pool({
+//   host: 'localhost',
+//   port: '5432',
+//   database: 'grupos_db',
+//   user: 'postgres',
+//   password: 'Burgospg'
+// })
 
 async function testConnection() {
   try {
