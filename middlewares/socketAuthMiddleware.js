@@ -2,7 +2,7 @@ import { verifyToken } from '../utils/decodedUtil.js';
 
 export const authenticateSocket = (socket, next) => {
     let token = null;
-    
+
     console.log(socket.handshake.headers)
     if (socket.handshake.headers['authorization']) {
         token = socket.handshake.headers['authorization'].split(' ')[1];
@@ -33,4 +33,3 @@ export const authenticateSocket = (socket, next) => {
         return next(new Error('Invalid or expired token'));
     }
 };
-

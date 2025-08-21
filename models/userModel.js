@@ -10,7 +10,7 @@ class User{
     static async findByUSer({address_mail}){
         try{ 
             const query = 'SELECT * FROM users WHERE address_mail = $1';
-            const findUser = await connection.query(query, [address_mail])
+            const findUser = await connection.query(query, [address_mail]);
 
             return findUser.rows[0]
         }catch(error){
@@ -32,7 +32,7 @@ class User{
         try{
             const queryGetUser = 'SELECT address_mail, username FROM users WHERE id_users = $1';
             const results = await connection.query(queryGetUser, [userID]);
-            return results 
+            return results.rows[0]
         }catch(error){
             throw new Error('Error al obtener la informacion del usuario')
         }
