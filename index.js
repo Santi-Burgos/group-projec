@@ -10,6 +10,9 @@ import http from 'http';
 
 const app = express();
 
+
+const PORT = 3000;
+
 app.use(cookieParser());
 
 app.use(corsMiddleware()); 
@@ -70,6 +73,6 @@ io.on("connection", (socket) => {
 });
 
 
-server.listen(process.env.PORT, () => {
-    console.log(`servidor corriendo en el puerto http://localhost:${process.env.PORT}`);
+server.listen(PORT, () => {
+    console.log(`servidor corriendo en el puerto http://localhost:${PORT}`);
 });

@@ -38,15 +38,13 @@ class Invitation {
     }
 
     static async deleteInvitation({ groupID, userID }) {
+      const deleteInvitationQuery = `
+          DELETE FROM group_invitation
+          WHERE id_group = $1 AND id_users = $2
+      `;
         try {
-            const query = `
-                DELETE FROM group_invitation
-                WHERE id_group = $1 AND id_users = $2
-            `;
-            await connection.query(query, [groupID, userID]);
-            return { success: true };
+            await connection.query(deleteInvitationQuery, [groupID, userID]);
         } catch (error) {
-            console.log('Error en rejectedInvitation:', error.message);
             throw new Error('Error al rechazar la invitación');
         }
     }

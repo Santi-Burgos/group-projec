@@ -2,23 +2,21 @@ import bcrypt from 'bcrypt'
 import User from '../models/userModel.js'
 import { validateUser } from '../validations/userValidations.js';
 import {hashPassword} from '../services/authService.js'
+import { authService } from '../services/auth.service.js';
 
-export const registerUser = async (req, res) => {
+export const registerUser = async (req, res) => {    
     try {
-
         const validationResult = validateUser(req.body);
         console.log(validationResult)
 
         if (validationResult.error) {
-            return res.status(400).json({ 
-                message: 'Validation error', 
-                details: validationResult.error });
+          return res.status(400).json({ 
+          message: 'Validation error', 
+          details: validationResult.error });
         }
 
         const { address_mail, username, password } = req.body;
         
-        
-
         const hashedPassword = await hashPassword(password);
         const userCreate = await User.createUser({address_mail, username, hashedPassword});
         res.status(201).json(userCreate);
@@ -88,3 +86,17 @@ export const deleteUserController = async(req, res) =>{
         res.status(400).json({message: error.message})
     }
 }
+
+class UserController {
+  registerUser = async(req, res) =>{
+    const { address_mail, username, password } = req.body;
+    try{
+      const createUser = await authService.createUser(address_mail, username, password);
+      res.status(201).json({createUser})
+    }catch(e){
+      next(e)
+    }
+  }
+}
+
+export const userController = new UserController();

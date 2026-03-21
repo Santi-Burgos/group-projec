@@ -1,20 +1,21 @@
 import express from 'express';
 import { getUser, registerUser, editUser, deleteUserController} from '../controllers/userController.js';
-import { loginUser, logoutUser } from '../controllers/authController.js';
 import { authToken } from '../middlewares/authMiddleware.js';
 import { upload } from '../middlewares/uploadsMiddleware.js';
 import { createGroup, getGroups, quitGroup } from '../controllers/groupController.js';
 import { acceptedInvitation, createInvitation, getNotification, rejectedInvitation } from '../controllers/notificationController.js';
 import { getMessage, sendMessage } from '../controllers/msgController.js';
 import { deleteMemberController, editMemberController, getMembersGroupController } from '../controllers/groupMembersController.js';
+import authRouter from './auth.routes.js';
 
 
 const router = express.Router();
 
 
+
+router.use('/auth/', authRouter)
+
 router.post('/create', registerUser);
-router.post('/login', loginUser);
-router.post('/logout', authToken, logoutUser)
 
 router.get('/profile', authToken, getUser);
 router.put('/profile', authToken, editUser)

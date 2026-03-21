@@ -1,43 +1,32 @@
-import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
 import { verifyToken } from '../utils/decodedUtil.js';
+import { EntityNotFound, UnauthorizedError } from './httpErrors.middleware.js';
 
 export const authToken = async (req, res, next) => {
-    const authHeader = req.get('Authorization');
-    const token = req.cookies.access_token || authHeader && authHeader.split(' ')[1];
+  const authHeader = req.get('Authorization');
+  const token = req.cookies.access_token || authHeader && authHeader.split(' ')[1];
 
-if (!token) { 
-    return res.status(401).json({ 
-        message: 'No token provided', 
-        details: 'El token de acceso no está presente en las cookies', 
-    });} 
+  if (!token) { 
+    throw new UnauthorizedError('Not token provided')
+  } 
 
-    let decoded; 
-
+    let decoded;
     try {
-        decoded = verifyToken(token); 
-    } catch (error){ 
-        return res.status(401).json({
-             message: 'Invalid token',
-              details: error.message || 'El token es inválido o ha expirado', 
-            }); 
+      decoded = verifyToken(token);
+    }catch(error){ 
+      throw new UnauthorizedError('invalid token')
     } 
 
-    if (!decoded || !decoded.id_user){ 
-        return res.status(401).json({
-             message: 'Invalid token payload', 
-             details: 'El token no contiene un id_user válido', 
-            }); 
+    if (!decoded || !decoded.userId){ 
+      throw new UnauthorizedError('invalid token payload') 
     } 
     req.user = decoded; 
     
-    const user = await User.findById({
-        userID: decoded.id_user
-    }); 
+    const userId = decoded.userId
+    const user = await User.findById(userId); 
 
     if (!user) { 
-        return res.status(401).json({ 
-            message: 'El usuario ya no existe' 
-        }); 
+      throw new EntityNotFound('User doesnt exists') 
     } 
-    next(); };
+    next(); 
+  };

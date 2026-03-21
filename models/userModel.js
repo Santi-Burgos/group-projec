@@ -18,7 +18,7 @@ class User{
         }
     }
 
-    static async findById({userID}){
+    static async findById(userID){
         try{
             const query = 'SELECT * FROM users WHERE id_users = $1';
             const findById = await connection.query(query, [userID])
