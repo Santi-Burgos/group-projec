@@ -18,7 +18,7 @@ class AuthController{
     }
   }
 
-  logouUtser = async(req, res)=>{
+  logoutUser = async(req, res)=>{
     res.clearCookie('access_token').json({message: 'Logout successful'});
   }
 }

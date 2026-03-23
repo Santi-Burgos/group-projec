@@ -1,7 +1,60 @@
 import connection from "../config/database.js"
-import { EntityNotFound } from "../middlewares/httpErrors.middleware.js";
+import { BadRequestError, EntityNotFound, InternalServerError } from "../middlewares/httpErrors.middleware.js";
 
 class UserModels{
+  createUser = async (emailAddress, username, hashedPassword) => {
+    const queryCreateUser = `
+      INSERT INTO users(address_mail, username, password)
+      VALUES($1, $2, $3)
+      RETURNING address_mail, username`
+    try{
+      const createUser = await connection.query(queryCreateUser, [emailAddress, username, hashedPassword]);
+      return createUser?.rows[0];
+    }catch(e){
+      throw new BadRequestError(e.message)
+    }
+  };
+
+  editUser = async(emailAddress, username, newHashedPassword, userId)=>{
+    const queryEditUser = `
+      UPDATE users
+      SET address_mail = $1,
+        username = $2,
+        password = $3
+      WHERE id_users = $4
+    `
+    try{
+      const userEdited = await connection.query(queryEditUser, [emailAddress, username, newHashedPassword, userId])
+      return userEdited?.rows[0];
+    }catch(e){
+      throw new BadRequestError(e.message)
+    }
+  }
+
+  deleteUser = async(userId) =>{
+    const queryDeleteUser = `
+    DELETE FROM users
+    WHERE id_users = $1`
+    try{
+      await connection.query(queryDeleteUser, [userId]);
+    }catch(e){
+      throw new BadRequestError(e.message)
+    }
+  }
+
+  findUserById = async(userId) =>{
+    const queryFindUser = `
+      SELECT id_user, address_email, username, password
+      FROM users
+      WHERE id_user = $1`
+    try{
+      const userFounded = await connection.query(queryFindUser, [userId]);
+      return userFounded?.rows[0] 
+    }catch(e){
+      throw new InternalServerError("Error técnico al buscar el usuario");
+    }
+  }
+
   findUserByEmail = async(emailAddress) =>{
     const queryFindUserByEmail = `
       SELECT id_users, password 
@@ -16,4 +69,4 @@ class UserModels{
   }
 }
 
-export const userModels = new UserModels()
+export const userModels = new UserModels();

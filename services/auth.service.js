@@ -7,10 +7,14 @@ import { config as configDotenv } from 'dotenv';
 configDotenv();
 
 export class AuthService {
-  auth = async(emailAddress, encryptedPassword)=> {
+  auth = async(emailAddress, password)=> {
     const JWT_ACCESSTOKEN_TIME = '1h';
     const existingUser = await userService.validateExistingUser(emailAddress);
-    await this.validatePassword(encryptedPassword, existingUser.password);
+    if(!existingUser){
+      throw new UnauthorizedError('Email or password are invalid');
+    }
+
+    await this.validatePassword(password, existingUser.password);
 
     const userId = existingUser.id_users;
 
@@ -31,8 +35,8 @@ export class AuthService {
     }
   }
 
-  validatePassword = async(encryptedPassword, existingPassword)=> {
-    const isMatch = await bcrypt.compare(encryptedPassword, existingPassword);
+  validatePassword = async(password, existingPassword)=> {
+    const isMatch = await bcrypt.compare(password, existingPassword);
     if (!isMatch) {
       throw new UnauthorizedError('Email or password are invalid');
     }
