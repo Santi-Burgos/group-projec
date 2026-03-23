@@ -1,4 +1,4 @@
-import User from '../models/userModel.js';
+import { userModels } from '../models/user.models.js';
 import { verifyToken } from '../utils/decodedUtil.js';
 import { EntityNotFound, UnauthorizedError } from './httpErrors.middleware.js';
 
@@ -23,7 +23,7 @@ export const authToken = async (req, res, next) => {
     req.user = decoded; 
     
     const userId = decoded.userId
-    const user = await User.findById(userId); 
+    const user = await userModels.findUserById(userId); 
 
     if (!user) { 
       throw new EntityNotFound('User doesnt exists') 

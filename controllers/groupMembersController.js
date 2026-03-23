@@ -1,4 +1,4 @@
-import groupMembers from "../models/groupMemberModel.js";
+import groupMembers from "../models/groupMember.models.js";
 
 export const getMembersGroupController = [
     async(req, res) => {
@@ -23,7 +23,6 @@ export const deleteMemberController = [
         try{
             const userID = req.user.id_user; 
             const {memberDelete , groupID} = req.body; 
-            console.log('group:', groupID, 'member:', memberDelete)
             const removeMember = await groupMembers.deleteMember({
                 userID, 
                 groupID,
