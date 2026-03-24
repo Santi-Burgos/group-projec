@@ -1,7 +1,6 @@
-import { UnauthorizedError } from "../middlewares/httpErrors.middleware";
-import { memberGroupModels } from "../models/groupMember.models"
-import rolMember from "../models/groupMemberUtil";
-import { roleCanDo } from "../utils/valuesRoles.utils";
+import { UnauthorizedError } from "../middlewares/httpErrors.middleware.js";
+import { memberGroupModels } from "../models/members.models.js"
+import { roleCanDo } from "../utils/valuesRoles.utils.js";
 
 class MemberGroupService{
   getMembersGroup = async(groupId)=>{

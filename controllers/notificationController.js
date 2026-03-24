@@ -2,6 +2,9 @@ import Invitation from "../models/InvitationModel.js";
 import User from "../models/userModel.js"
 import Group from "../models/groupModel.js";
 
+class InvitationController{}
+export const invitationController = new InvitationController();
+
 export const getNotification = [
     async (req, res)=> {
     try{

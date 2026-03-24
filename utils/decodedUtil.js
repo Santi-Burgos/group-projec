@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { UnauthorizedError } from '../middlewares/httpErrors.middleware';
 
 
 export const verifyToken = (token) => {
@@ -6,6 +7,6 @@ export const verifyToken = (token) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET); 
     return decoded; 
   }catch (error) {
-    throw new Error('Invalid or expired token');
+    throw new UnauthorizedError('Invalid or expired token');
   }
 };
