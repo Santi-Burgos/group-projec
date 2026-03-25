@@ -3,7 +3,7 @@ import router from './routes/router.js';
 import http from 'http';
 import { Server as WebSocketServer } from 'socket.io';
 import { setupMiddlewares } from './config/middlewares.js';
-import { authenticateSocket } from './middlewares/socketAuthMiddleware.js';
+import { authenticateSocket } from './middlewares/socketAuth.middleware.js';
 import { setupSocket } from './socket/message.socket.js';
 
 const app = express();

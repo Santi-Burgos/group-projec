@@ -10,12 +10,12 @@ const router = Router();
 
 
 
-router.use('/auth/', authRouter);
-router.use('/user/', userRouter);
-router.use('/group/', groupRouter);
-router.use('/group/members/', membersRouter);
-router.use('/invitations/', invitationRouter);
-router.use('/messages/', messageRouter);
+router.use('/auth', authRouter);
+router.use('/user', userRouter);
+router.use('/group', groupRouter);
+router.use('/group/members', membersRouter);
+router.use('/invitations', invitationRouter);
+router.use('/messages', messageRouter);
 
 
 

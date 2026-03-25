@@ -10,14 +10,14 @@ class MessageService {
     }
   }
 
-  sendMessage = async(userId, msgBody, groupId)=>{
+  sendMessage = async(msgBody, userId, groupId)=>{
     try{
-      await messageModel.sendMessage(userId, groupId, msgBody);
+      await messageModel.sendMessage(msgBody, userId, groupId);
       return{
         success: true
       }
     }catch(error){
-      next(error);
+      throw error;
     }
   }
 }

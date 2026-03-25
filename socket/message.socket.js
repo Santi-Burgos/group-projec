@@ -6,12 +6,16 @@ export const setupSocket = (io) =>{
       socket.join(groupId);
     })
     
-    socket.on('sendMessage', async({groupId, msgBody})=>{
+    socket.on('sendMessage', async({groupID: groupId, msg_body: msgBody })=>{
       try{
-        const userId = socket.user?.id_user;
-        if(userId) return;
+        const userId = socket.user?.userId;
 
-        await messageService.sendMessage(userId, groupId, msgBody);
+        if(!userId){
+          console.error("No se encontró el ID del usuario en el socket");
+          return;
+        } 
+
+        await messageService.sendMessage(msgBody, userId, groupId);
         const updatedMessages = await messageService.getMessages(groupId);
 
         io.to(groupId).emit("receiveMessage", updatedMessages);
@@ -22,7 +26,7 @@ export const setupSocket = (io) =>{
 
     socket.on("leaveRoom", (groupID) => {
       socket.leave(groupID);
-      console.log(`Usuario ${socket.user?.id_user} salió del grupo: ${groupID}`);
+      console.log(`Usuario ${socket.user?.userId} salió del grupo: ${groupID}`);
     });
   });
 }

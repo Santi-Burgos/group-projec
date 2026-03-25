@@ -1,5 +1,5 @@
 import connection from "../config/database.js";
-import { HttpError, InternalServerError } from "../middlewares/httpErrors.middleware.js";
+import { InternalServerError } from "../middlewares/httpErrors.middleware.js";
 
 class GroupModels{
   getAllGroupForUser = async(userId) =>{
@@ -51,7 +51,7 @@ class GroupModels{
       return createGroupResponse
     }catch(error){
       await conn.query('ROLLBACK');
-      throw new InternalServerError("Cannot create group, try in another moment");
+      throw new InternalServerError(`Cannot create group, try in another moment ${error.message}`);
     }finally{
       conn.release();
     }

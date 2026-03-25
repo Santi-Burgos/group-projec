@@ -5,6 +5,7 @@ class GroupMembersController{
     const groupId = req.query.groupID;
     try{       
       const takeMembersGroup = await memberGroupService.getMembersGroup(groupId);
+      console.log('takes',takeMembersGroup)
       res.status(200).json(takeMembersGroup);
     }catch(error){
       next(error)

@@ -2,7 +2,7 @@ import { groupService } from "../services/group.service.js";
 
 class GroupController{
   getGroups = async(req, res, next) =>{
-    const userId = req.user.id_user;
+    const userId = req.user.userId;
     try{
       const getGroups = await groupService.getGroupsForUser(userId);
       res.status(200).json(getGroups);
@@ -12,7 +12,7 @@ class GroupController{
   }  
   
   createGroup = async(req, res, next) =>{
-    const userId = req.user.id_user;
+    const { userId } = req.user;    
     const { 
       group_name: groupName, 
       group_description: groupDescription, 

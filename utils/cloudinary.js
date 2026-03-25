@@ -14,7 +14,7 @@ cloudinary.config({
 export const uploadToCloudinary = async(files) =>{
   try{
     const result = await new Promise((resolve, reject) => {
-      const stream = this.cloudinary.uploader.upload_stream(
+      const stream = cloudinary.uploader.upload_stream(
         {folder: "groups"},
         (error, result) =>{
           if(error) return reject(error);
@@ -28,7 +28,7 @@ export const uploadToCloudinary = async(files) =>{
       urlImg: result.secure_url
     };
   }catch(error){
-    throw new InternalServerError("Error uploading images to cloudinary");
+    throw new InternalServerError(`Error uploading images to cloudinary ${error.message}`);
   }
 }
 

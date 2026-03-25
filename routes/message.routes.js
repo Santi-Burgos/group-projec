@@ -4,7 +4,7 @@ import { messageController } from "../controllers/message.controller.js";
 
 const messageRouter = Router();
 
-messageRouter.get('getMessage', authToken, messageController.getMessage);
-messageRouter.post('sendMessage', authToken, messageController.sendMessage);
+messageRouter.get('/getMessage', authToken, messageController.getMessage);
+messageRouter.post('/sendMessage', authToken, messageController.sendMessage);
 
 export default messageRouter;

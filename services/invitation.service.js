@@ -20,7 +20,7 @@ class InvitationService {
     try{
       const invitedUserId = await userService.validateExistingUser(emailAddress);
 
-      const getMembersIds = await memberGroupService.getMembersIds(groupId);
+      const getMembersIds = await memberGroupService.getMembersGroupOnlyId(groupId);
       const membersIds = getMembersIds.map(m => m.id_users);
 
       if(membersIds.includes(invitedUserId)){

@@ -13,7 +13,7 @@ class UserController {
 
   getUser = async(req, res, next) =>{
     try{
-      const userId = req.user.id_user;
+      const userId = req.user.userId;
       const getUser = await userService.getUserWitoutPassword(userId);
       res.status(200).json(getUser);
     }catch(e){
@@ -23,7 +23,7 @@ class UserController {
 
   editUser = async(req, res, next) =>{
     try{
-      const userId = req.user.id_user;
+      const userId = req.user.userId;
       const {
         address_mail: emailAddress, 
         username, 
@@ -40,7 +40,7 @@ class UserController {
 
   deleteUser = async(req, res, next) =>{
     try{
-      const userId = req.user.id_user;
+      const userId = req.user.userId;
       const userDelete = await userService.deleteUser(userId)
       res.status(200).json(userDelete)
     }catch(e){

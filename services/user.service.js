@@ -75,11 +75,11 @@ class UserService {
     try{
       const userGived = await userModels.findUserById(userId);
       if(!userGived){
-        throw new EntityNotFound('Error retrieving user data')
+        throw new EntityNotFound('Error retrieving user data');
       }
       return userGived
     }catch(error){
-      throw error
+      throw new EntityNotFound(`Error retrieving user data: ${error.message}`)
     }
   }
 

@@ -21,7 +21,7 @@ class MessageModel {
       const resGetMessage = await connection.query(queryGetMessage, [groupId]);
       return resGetMessage.rows;
     }catch(error){
-      throw new InternalServerError();
+      throw new InternalServerError('Error fetching groups');
     }
   }
 
@@ -35,7 +35,7 @@ class MessageModel {
       const resSendMessage = await connection.query(query, [msgBody, userId, groupId]);
       return resSendMessage.rows[0];
     }catch(error){
-      throw new InternalServerError();
+      throw new InternalServerError(`error ${error.message}`);
     }
   }
 }

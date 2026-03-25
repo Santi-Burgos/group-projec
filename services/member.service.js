@@ -53,7 +53,7 @@ class MemberGroupService{
     }
   }
 
-  getMembersGroup = async(groupId)=>{
+  getMembersGroupOnlyId = async(groupId)=>{
     try{
       const getMembers = await memberGroupModels.getMembersId(groupId);
       return getMembers

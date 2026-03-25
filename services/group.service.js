@@ -30,7 +30,7 @@ class GroupServices{
 
   getGroupsForUser = async(userId) =>{
     try{
-      const groups = await groupModels.getUserForGroup(userId);
+      const groups = await groupModels.getAllGroupForUser(userId);
       return{
         success: true,
         data: groups ?? []

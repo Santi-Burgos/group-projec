@@ -10,9 +10,10 @@ class MemberGroupModels {
       JOIN users  u
         ON gm.id_users = u.id_users 
       WHERE gm.id_group = $1`
-
     try{
       const responseGetMembers = await connection.query(queryGetMembers, [groupId]);
+      
+      console.log('log', responseGetMembers.rows)
       return responseGetMembers?.rows; 
     }catch(error){
       throw new InternalServerError('Cannot get member list');
