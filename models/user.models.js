@@ -44,14 +44,14 @@ class UserModels{
 
   findUserById = async(userId) =>{
     const queryFindUser = `
-      SELECT id_user, address_email, username, password
+      SELECT id_users, address_mail, username, password
       FROM users
-      WHERE id_user = $1`
+      WHERE id_users = $1`
     try{
       const userFounded = await connection.query(queryFindUser, [userId]);
       return userFounded?.rows[0] 
-    }catch(e){
-      throw new InternalServerError("Error técnico al buscar el usuario");
+    }catch(error){
+      throw new InternalServerError(`Error al obtener el usuario ${error.message}`);
     }
   }
 

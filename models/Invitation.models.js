@@ -1,24 +1,24 @@
 import connection from "../config/database.js";
+import { InternalServerError } from "../middlewares/httpErrors.middleware.js";
 
 class InvitationModel {
   getAllNotification = async (userId) => {
+    const queryGetNotifications = `
+      SELECT 
+        u.username,
+        gd.group_name,
+        gi.*
+      FROM group_invitation gi
+      JOIN users u
+        ON u.id_users = gi.invited_by
+      JOIN group_data gd
+        ON gd.id_group = gi.id_group
+      WHERE gi.id_users = $1`;
     try {
-      const queryGetNotifications = `
-        SELECT 
-          u.username,
-          gd.group_name,
-          gi.*
-        FROM group_invitation gi
-        JOIN users u
-          ON u.id_users = gi.invited_by
-        JOIN group_data gd
-          ON gd.id_group = gi.id_group
-        WHERE gi.id_users = $1`;
       const { rows } = await connection.query(queryGetNotifications, [userId]);
       return rows;
     } catch (error) {
-      console.log('Error en getAllNotification:', error.message);
-      throw new Error('Error al obtener las notificaciones');
+      throw new InternalServerError('Error al obtener las notificaciones');
     }
   }
 
@@ -30,8 +30,7 @@ class InvitationModel {
       const result = await connection.query(queryAcceptedInvitation, [groupId, userId]);
       return { success: true };
     } catch (error) {
-      console.log('Error en acceptedInvitation:', error.message);
-      throw new Error('Error al aceptar la invitación');
+      throw new InternalServerError('Error al aceptar la invitación');
     }
   }
 

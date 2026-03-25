@@ -52,6 +52,15 @@ class MemberGroupService{
       throw error
     }
   }
+
+  getMembersGroup = async(groupId)=>{
+    try{
+      const getMembers = await memberGroupModels.getMembersId(groupId);
+      return getMembers
+    }catch(error){
+      throw error
+    }
+  }
 }
 
 export const memberGroupService = new MemberGroupService();

@@ -19,7 +19,23 @@ class MemberGroupModels {
     }
   }
 
-   deleteMember = async(memberDelete, groupId, userId)=>{
+  getMembersId = async(groupId) =>{
+    const queryGetMembers = `
+      SELECT u.id_users
+      FROM group_members gm
+      JOIN users u
+        ON gm.id_users = u.id_users
+      WHERE gm.id_group = $1`
+    
+    try{
+      const responseGetMembers = await connection.query(queryGetMembers, [groupId]);
+      return responseGetMembers?.rows; 
+    }catch(error){
+      throw new InternalServerError('Cannot get member list');
+    }
+  }
+
+  deleteMember = async(memberDelete, groupId, userId)=>{
     const queryDeleteMember = 'DELETE FROM group_members WHERE id_users = $1 and id_group = $2'
     try{
       await connection.query(query, [memberDelete, userId, groupId])

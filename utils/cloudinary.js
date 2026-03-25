@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { config as configDotenv } from 'dotenv';
-import { InternalServerError } from '../middlewares/httpErrors.middleware';
+import { InternalServerError } from '../middlewares/httpErrors.middleware.js';
 
 configDotenv();
 

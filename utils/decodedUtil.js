@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { UnauthorizedError } from '../middlewares/httpErrors.middleware';
+import { UnauthorizedError } from '../middlewares/httpErrors.middleware.js';
 
 
 export const verifyToken = (token) => {

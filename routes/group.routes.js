@@ -1,7 +1,7 @@
-import { groupController } from "../controllers/group.controller.js";
 import { Router } from "express";
-import { authToken } from "../middlewares/authMiddleware.js";
-import { upload } from "../middlewares/uploadsMiddleware.js";
+import { groupController } from "../controllers/group.controller.js";
+import { authToken } from "../middlewares/auth.middleware.js";
+import { upload } from "../middlewares/uploads.middleware.js";
 
 const groupRouter = Router();
 
