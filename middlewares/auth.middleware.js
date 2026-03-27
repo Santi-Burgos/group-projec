@@ -15,6 +15,7 @@ export const authToken = async (req, res, next) => {
     try {
       decoded = verifyToken(token);
     }catch(error){ 
+      console.error(`Invalid token ${error.message}`);
       throw new UnauthorizedError('invalid token')
     } 
   
@@ -30,6 +31,7 @@ export const authToken = async (req, res, next) => {
     } 
     next(); 
   }catch(error){
+    console.error(`Invalid token ${error.message}`);
     next(new UnauthorizedError('token inválido o expirado'));
   }
 };

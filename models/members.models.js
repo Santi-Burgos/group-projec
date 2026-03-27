@@ -3,64 +3,66 @@ import { InternalServerError } from "../middlewares/httpErrors.middleware.js";
 
 
 class MemberGroupModels {
-  getMembersAll = async(groupId)=>{
+  getMembersAll = async (groupId) => {
     const queryGetMembers = `
       SELECT u.address_mail, u.username, gm.* 
       FROM group_members gm
       JOIN users  u
         ON gm.id_users = u.id_users 
       WHERE gm.id_group = $1`
-    try{
+    try {
       const responseGetMembers = await connection.query(queryGetMembers, [groupId]);
-      return responseGetMembers?.rows; 
-    }catch(error){
+      return responseGetMembers?.rows;
+    } catch (error) {
+      console.error(`Error getting member list: ${error.message}`);
       throw new InternalServerError('Cannot get member list');
     }
   }
 
-  getMembersId = async(groupId) =>{
+  getMembersId = async (groupId) => {
     const queryGetMembers = `
       SELECT u.id_users
       FROM group_members gm
       JOIN users u
         ON gm.id_users = u.id_users
       WHERE gm.id_group = $1`
-    
-    try{
+
+    try {
       const responseGetMembers = await connection.query(queryGetMembers, [groupId]);
-      return responseGetMembers?.rows; 
-    }catch(error){
+      return responseGetMembers?.rows;
+    } catch (error) {
+      console.error(`Error getting member ID list: ${error.message}`);
       throw new InternalServerError('Cannot get member list');
     }
   }
 
-  deleteMember = async(memberDelete, groupId, userId)=>{
+  deleteMember = async (memberDelete, groupId, userId) => {
     const queryDeleteMember = 'DELETE FROM group_members WHERE id_users = $1 and id_group = $2'
-    try{
-      await connection.query(query, [memberDelete, userId, groupId])
-    
-    }catch(error){
+    try {
+      await connection.query(queryDeleteMember, [memberDelete, userId, groupId])
+
+    } catch (error) {
       console.error('no se ha podido eliminar al usuario solicitado:', error);
       throw new InternalServerError('Cannot delete user');
     }
   }
 
-  editMember = async(editMember, groupID, userID, id_rol)=>{
+  editMember = async (editMember, groupID, userID, id_rol) => {
     const queryEditMember = `
       UPDATE group_members 
       SET id_rol = $1 
       WHERE  id_group = $2 
         AND id_users = $3`
-    try{
+    try {
       const responseEditMember = await connection.query(queryEditMember, [id_rol, groupID, editMember])
       return responseEditMember
-    }catch(error){
+    } catch (error) {
       console.error('error al editar el rol del miembro:', error)
       throw new InternalServerError('Cannot edit user');
     }
   }
-  
-  getRolMember = async(userID, groupID)=>{
+
+  getRolMember = async (userID, groupID) => {
     const queryRolMember = `
       SELECT gr.rol_name 
       FROM group_rol gr
@@ -68,31 +70,32 @@ class MemberGroupModels {
         ON gm.id_rol = gr.id_rol
       WHERE gm.id_users = $1 
         AND gm.id_group = $2`
-    try{
-      const responseGetRole  = await connection.query(queryRolMember, [userID, groupID]);
+    try {
+      const responseGetRole = await connection.query(queryRolMember, [userID, groupID]);
       return responseGetRole?.rows[0].rol_name;
-    } catch(error){
+    } catch (error) {
       console.error('no se ha podido obtener el rol del miembro,', error)
       throw error;
-    }   
+    }
   }
 
-  checkHasAnotherOwner = async(groupId) =>{
+  checkHasAnotherOwner = async (groupId) => {
     const queryGetOwnersInGroup = `
       SELECT id_users
       FROM group_members 
       WHERE id_rol = 1`
-  
-    try{
+
+    try {
       const ownerInGroup = await connection.query(queryGetOwnersInGroup, [groupId]);
       return ownerInGroup?.rows
-    }catch(error){
+    } catch (error) {
+      console.error(`Error checking for another owner: ${error.message}`);
       throw new InternalServerError();
     }
   }
-  
-  
-  ascendOwnerMember = async(groupId)=> {
+
+
+  ascendOwnerMember = async (groupId) => {
     const conn = await connection.connect();
     const queryGetOlderMember = `
       SELECT id_users
@@ -100,25 +103,26 @@ class MemberGroupModels {
       WHERE id_group = $1
       ORDER BY gm.joined_at ASC 
       LIMIT 1`
-      
+
     const updateOwnerOlderMember = `
       UPDATE group_members
       SET id_rol = $1
       WHERE id_group = $2
       AND id_users = $3`
 
-    try{
+    try {
       await conn.query('BEGIN');
       const getOlderMember = await conn.query(queryGetOlderMember, [groupId]);
       const olderMemberId = getOlderMember?.rows[0].id_users
-  
+
       await conn.query(updateOwnerOlderMember, [olderMemberId]);
       await conn.query('COMMIT');
       return olderMemberId;
-    }catch(error){
-      await conn.query('COMMIT')
+    } catch (error) {
+      console.error(`Error ascending owner: ${error.message}`);
+      await conn.query('ROLLBACK')
       throw new InternalServerError('Error ascendOwner');
-    }finally{
+    } finally {
       conn.release();
     }
   }

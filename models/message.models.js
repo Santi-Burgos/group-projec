@@ -21,6 +21,7 @@ class MessageModel {
       const resGetMessage = await connection.query(queryGetMessage, [groupId]);
       return resGetMessage.rows;
     }catch(error){
+      console.error(`Error getting messages: ${error.message}`);
       throw new InternalServerError('Error fetching groups');
     }
   }

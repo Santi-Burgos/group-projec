@@ -18,6 +18,7 @@ class InvitationModel {
       const { rows } = await connection.query(queryGetNotifications, [userId]);
       return rows;
     } catch (error) {
+      console.error(`Error fetching notifications ${error.message}`);
       throw new InternalServerError('Error al obtener las notificaciones');
     }
   }
@@ -45,8 +46,8 @@ class InvitationModel {
       await connection.query(queryDeleteInvitation, [groupId, userId]);
       return;
     } catch (error) {
-      console.log('Error en deleteInvitation:', error.message);
-      throw new Error('Error al rechazar la invitación');
+      console.error('Error deleting invitations:', error.message);
+      throw new InternalServerError('Error al rechazar la invitación');
     }
   }
 
@@ -58,8 +59,8 @@ class InvitationModel {
       const resultSendInvitation = await connection.query(querySendInvitation, [groupId, userId, invitedBy, statusId ]);
       return resultSendInvitation.rows[0]
     } catch (error) {
-      console.log('Error en sendInvitation:', error.message);
-      throw new Error('Error al crear invitación');
+      console.error('Error deleting invitations:', error.message);
+      throw new InternalServerError('Error creating the invitation');
     }
   }
 
@@ -71,8 +72,8 @@ class InvitationModel {
       const { rows } = await connection.query(queryValidateInvitation, [userId, groupId]);
       return rows[0];
     } catch (error) {
-      console.log('Error en validateInvitation:', error.message);
-      throw new Error('Error al validar invitaciones: ' + error.message);
+      console.error('Error en validateInvitation:', error.message);
+      throw new InternalServerError('Error al validar invitaciones');
     }
   }
 }

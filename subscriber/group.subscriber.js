@@ -11,11 +11,11 @@ groupEvents.on('userLeft', async(groupId)=>{
 
     const hasAdminInGroup = await memberGroupModels.checkHasAnotherOwner(groupId);
     if(!hasAdminInGroup || hasAdminInGroup.length === 0){
-      const newOwnerMemberId = await memberGroupModels.ascendOwnerMember(groupId);
+      await memberGroupModels.ascendOwnerMember(groupId);
       //enviar notificacion de aviso
     }
     return;
   }catch(error){
-    throw error
+    console.error("Error en evento userLeft:", error.message);
   }
 })

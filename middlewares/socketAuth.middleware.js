@@ -31,7 +31,8 @@ export const authenticateSocket = (socket, next) => {
         }
         socket.user = decoded;
         next();
-    } catch (err) {
+    } catch (error) {
+        console.error(`Invalid token ${error.message}`);
         return next(new UnauthorizedError('Invalid or expired token'));
     }
   }catch(error){

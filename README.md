@@ -30,3 +30,11 @@ Recientemente, el proyecto ha pasado por un proceso integral de refactorización
 *   **Autenticación:** JWT (JSON Web Tokens).
 *   **Almacenamiento:** Cloudinary API para la gestión de archivos multimedia.
 *   **Seguridad:** Bcrypt para el hashing de contraseñas.
+*   **Calidad de Código:** ESLint para mantener estándares de codificación y prevenir errores.
+
+## Integración Continua y Despliegue (CI/CD)
+
+El proyecto cuenta con un flujo de trabajo automatizado mediante **GitHub Actions** para garantizar la calidad y estabilidad del código:
+
+*   **Verificación Automática:** En cada *push* o *pull request* a la rama `main`, se ejecutan automáticamente las tareas de linting (ESLint) para asegurar que el código cumpla con los estándares definidos.
+*   **Despliegue Continuo:** Una vez que las pruebas y verificaciones son exitosas, los cambios en la rama `main` se despliegan automáticamente en **Render** mediante un webhook de despliegue.

@@ -17,6 +17,7 @@ class GroupModels{
       const responseGroup = await connection.query(queryGetGroups, [userId]);
       return responseGroup?.rows
     }catch(error){
+      console.error(`Error retrieving user groups: ${error.message}`);
       throw new InternalServerError('Error retrieving user groups')
     }
   }
@@ -66,6 +67,7 @@ class GroupModels{
     try{
       await connection.query(queryQuitGroup, [groupId, userId]);
     }catch(error){
+      console.error(`Error quitting group: ${error.message}`);
       throw new InternalServerError("")
     }
     
@@ -80,6 +82,7 @@ class GroupModels{
       const responseUsersForGroup = await connection.query(getUsersForGroup, [groupId]);
       return responseUsersForGroup?.rows 
     }catch(error){
+      console.error(`Error getting users for group: ${error.message}`);
       throw new InternalServerError('Cannot get usersIds')
     }
   }
@@ -91,6 +94,7 @@ class GroupModels{
         WHERE id_group = $1`;
       await connection.query(queryDeleteGroup, [groupId]);
     }catch(error){
+      console.error(`Error deleting empty group: ${error.message}`);
       throw new InternalServerError('Error deleting empty group');
     }
   }
@@ -104,7 +108,7 @@ class GroupModels{
       const responseCountMemberGroup = await connection.query(queryGetRows, [groupID]);
       return responseCountMemberGroup?.rows[0].count;
     }catch(error){  
-      console.error('No se ha podido obtener el numero de miembros');
+      console.error(`No se ha podido obtener el numero de miembros: ${error.message}`);
       throw new InternalServerError();
     }
   }

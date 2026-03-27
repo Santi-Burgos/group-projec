@@ -1,5 +1,5 @@
 import connection from "../config/database.js"
-import { BadRequestError, EntityNotFound, InternalServerError } from "../middlewares/httpErrors.middleware.js";
+import { InternalServerError } from "../middlewares/httpErrors.middleware.js";
 
 class UserModels{
   createUser = async (emailAddress, username, hashedPassword) => {
@@ -10,8 +10,9 @@ class UserModels{
     try{
       const createUser = await connection.query(queryCreateUser, [emailAddress, username, hashedPassword]);
       return createUser?.rows[0];
-    }catch(e){
-      throw new BadRequestError(e.message)
+    }catch(error){
+      console.error(`Error create user ${error.message}`);
+      throw new InternalServerError('Error creating User')
     }
   };
 
@@ -26,8 +27,9 @@ class UserModels{
     try{
       const userEdited = await connection.query(queryEditUser, [emailAddress, username, newHashedPassword, userId])
       return userEdited?.rows[0];
-    }catch(e){
-      throw new BadRequestError(e.message)
+    }catch(error){
+      console.error(`Error edited user ${error.message}`);
+      throw new InternalServerError('Error edited User')
     }
   }
 
@@ -37,8 +39,9 @@ class UserModels{
     WHERE id_users = $1`
     try{
       await connection.query(queryDeleteUser, [userId]);
-    }catch(e){
-      throw new BadRequestError(e.message)
+    }catch(error){
+      console.error(`Error deleting user ${error.message}`);
+      throw new InternalServerError('Error deleting User')
     }
   }
 
@@ -51,7 +54,8 @@ class UserModels{
       const userFounded = await connection.query(queryFindUser, [userId]);
       return userFounded?.rows[0] 
     }catch(error){
-      throw new InternalServerError(`Error al obtener el usuario ${error.message}`);
+      console.error(`Error finding user ${error.message}`);
+      throw new InternalServerError('Error finding User')
     }
   }
 
@@ -63,8 +67,9 @@ class UserModels{
     try{
       const responseFindUser = await connection.query(queryFindUserByEmail, [emailAddress]);
       return responseFindUser?.rows[0];
-    }catch(e){
-      throw new EntityNotFound(e.message)
+    }catch(error){
+      console.error(`Error finding user ${error.message}`);
+      throw new InternalServerError('Error finding User')
     }
   }
 }
