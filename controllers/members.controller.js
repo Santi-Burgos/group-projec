@@ -5,7 +5,6 @@ class GroupMembersController{
     const groupId = req.query.groupID;
     try{       
       const takeMembersGroup = await memberGroupService.getMembersGroup(groupId);
-      console.log('takes',takeMembersGroup)
       res.status(200).json(takeMembersGroup);
     }catch(error){
       next(error)
@@ -27,7 +26,7 @@ class GroupMembersController{
     const userId = req.user.id_user;
     const {groupID: groupId, editMember, id_rol: idRol} = req.body;
     try{
-      const editRolMember = await groupMembers.editMember(userId, groupId, editMember, idRol);
+      const editRolMember = await memberGroupService.editMemberGroup(userId, groupId, editMember, idRol);
       res.status(200).json(editRolMember);
     }catch(error){
       next(error);

@@ -9,7 +9,7 @@ class InvitationService {
       const getNotifications = await invitationModel.getAllNotification(userId);
       return{
         success: true,
-        data: getNotifications?.rows === 0 ? getNotifications : []
+        data: getNotifications?.rows !== 0 ? getNotifications : []
       }
     }catch(error){
       throw error;
@@ -18,7 +18,8 @@ class InvitationService {
 
   createInvitation = async(invitedByUserId, groupId, emailAddress) =>{
     try{
-      const invitedUserId = await userService.validateExistingUser(emailAddress);
+      const invitedUser = await userService.validateExistingUser(emailAddress);
+      const invitedUserId = invitedUser.id_users
 
       const getMembersIds = await memberGroupService.getMembersGroupOnlyId(groupId);
       const membersIds = getMembersIds.map(m => m.id_users);
@@ -43,10 +44,10 @@ class InvitationService {
     }
   } 
 
-  acceptedInvitation = async(userId, groupId) =>{
+  acceptedInvitation = async(groupId, userId) =>{
     try{
       const successInvitation = await invitationModel.acceptedInvitation(groupId, userId);
-      if(!successInvitation || successInvitation.length === 0){
+      if(!successInvitation || successInvitation.length === 0){ 
         throw new EntityNotFound('Invitation doesnt exists')
       }
 

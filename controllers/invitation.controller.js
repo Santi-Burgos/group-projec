@@ -2,7 +2,7 @@ import { invitationService } from "../services/invitation.service.js";
 
 class InvitationController{
   getNotification = async (req, res, next) =>{
-    const userId = req.user.id_user
+    const userId = req.user.userId
     try{
       const getNotifications = await invitationService.getAllInvitations(userId);
       res.status(200).json(getNotifications);
@@ -12,8 +12,8 @@ class InvitationController{
   }
 
   createInvitation = async(req, res, next)=>{
-    const invitedByUserId = req.user.id_user;
-    const {groupId, emailAddress} = req.body;
+    const invitedByUserId = req.user.userId;
+    const {groupID: groupId, address_mail: emailAddress} = req.body;
     try{
       const createInvitation = await invitationService.createInvitation(invitedByUserId, groupId, emailAddress);
       res.status(200).json(createInvitation);
@@ -23,8 +23,8 @@ class InvitationController{
   }
 
   acceptedInvitation = async(req, res, next) =>{
-    const userId = req.user.id_user;
-    const groupId = req.body;
+    const userId = req.user.userId;
+    const {groupID: groupId} = req.body;
     try{
       const acceptInvitation = await invitationService.acceptedInvitation(groupId, userId);
       res.status(200).json(acceptInvitation);
@@ -34,7 +34,7 @@ class InvitationController{
   }
 
   rejectedInvitation = async(req, res, next) =>{
-    const userId = req.user.id_user;
+    const userId = req.user.userId;
     const groupId = req.body;
     try{
       const rejectInvitation = await invitationService.rejectedInvitation(groupId, userId);

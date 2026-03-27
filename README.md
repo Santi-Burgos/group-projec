@@ -1,19 +1,32 @@
-Este proyecto, estaba en un repositorio privado, consiste en el desarrollo de una aplicación web en la que los usuarios pueden crear grupos e invitar amigos para interactuar dentro de ellos. 
-La principal funcionalidad es un sistema de chat en tiempo real, implementado mediante WebSocket, que permite una comunicación dinámica entre los participantes del grupo.
+# Proyecto de Grupos y Chat en Tiempo Real
 
-Características principales
+Este proyecto es una aplicación web que permite a los usuarios crear grupos, invitar amigos e interactuar a través de un sistema de chat dinámico. Originalmente desarrollado en un entorno privado, el sistema ha evolucionado para ofrecer una experiencia de comunicación robusta y escalable.
 
-- Creación de grupos de usuarios.
-- Invitación de amigos a unirse a grupos.
-- Chat en tiempo real con mensajes instantáneos.
-- Autenticación segura mediante tokens JWT.
+La funcionalidad principal radica en la mensajería en tiempo real, facilitada mediante WebSockets, permitiendo una interacción fluida y constante entre los miembros de un grupo.
 
-Tecnologías utilizadas
+## Características Principales
 
-- Node.js y Express para el backend.
-- JWT para autenticación y autorización.
-- WebSocket con **Socket.IO** para la comunicación en tiempo real.
-- MySQL como sistema de almacenamiento relacional.
+*   **Gestión de Grupos:** Los usuarios pueden crear y administrar sus propios grupos.
+*   **Sistema de Invitaciones:** Capacidad para invitar a otros usuarios a unirse a grupos específicos.
+*   **Mensajería en Tiempo Real:** Chat instantáneo integrado con persistencia de mensajes.
+*   **Seguridad y Autenticación:** Implementación de tokens JWT para garantizar un acceso seguro y una autorización adecuada.
+*   **Gestión de Imágenes:** Integración con Cloudinary para la carga y almacenamiento de imágenes de grupos.
 
-Este proyecto es funcional, En versiones futuras voy refactorizarlo, 
-buscando mejorar la arquitectura del proyecto, aplicando principios de separación de responsabilidades y mayor escalabilidad.
+## Arquitectura y Refactorización
+
+Recientemente, el proyecto ha pasado por un proceso integral de refactorización para mejorar su mantenibilidad, escalabilidad y legibilidad. Los cambios clave incluyen:
+
+*   **Capa de Servicios (Service Layer):** Se ha migrado la lógica de negocio desde los controladores hacia servicios dedicados. Esto permite una separación clara de responsabilidades, donde los controladores solo manejan las solicitudes HTTP y las respuestas.
+*   **Patrón Singleton:** Los servicios se han implementado siguiendo el patrón Singleton, asegurando que exista una única instancia global de cada servicio, facilitando la gestión de dependencias y el estado interno.
+*   **Manejo Centralizado de Errores:** Se han introducido clases de error HTTP personalizadas (Unauthorized, EntityNotFound, InternalServer, etc.) para proporcionar respuestas de error consistentes y descriptivas a través de un middleware de manejo de excepciones.
+*   **Lógica Basada en Eventos:** Implementación de un sistema de suscriptores para manejar efectos secundarios complejos (como la reasignación automática de roles de administrador cuando un propietario abandona un grupo) de forma desacoplada.
+*   **Modularidad de Sockets:** La lógica de comunicación en tiempo real se ha desacoplado de la infraestructura principal, concentrándola en módulos especializados que interactúan directamente con la capa de servicios.
+
+## Tecnologías Utilizadas
+
+*   **Backend:** Node.js con Express.
+*   **Comunicación:** Socket.IO para el manejo de WebSockets.
+*   **Base de Datos:** PostgreSQL para la persistencia de datos relacionales.
+*   **Autenticación:** JWT (JSON Web Tokens).
+*   **Almacenamiento:** Cloudinary API para la gestión de archivos multimedia.
+*   **Seguridad:** Bcrypt para el hashing de contraseñas.

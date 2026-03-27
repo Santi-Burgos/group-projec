@@ -24,13 +24,15 @@ class InvitationModel {
 
   acceptedInvitation = async(groupId, userId)=> {
     try {
+      console.log(groupId, userId)
+
       const queryAcceptedInvitation = `
         INSERT INTO group_members(joined_at, id_rol, id_group, id_users)
         VALUES (NOW(), 3, $1, $2)`;
-      const result = await connection.query(queryAcceptedInvitation, [groupId, userId]);
+      await connection.query(queryAcceptedInvitation, [groupId, userId]);
       return { success: true };
     } catch (error) {
-      throw new InternalServerError('Error al aceptar la invitación');
+      throw new InternalServerError('Error al aceptar la invitación', error.message);
     }
   }
 

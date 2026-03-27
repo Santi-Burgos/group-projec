@@ -12,8 +12,6 @@ class MemberGroupModels {
       WHERE gm.id_group = $1`
     try{
       const responseGetMembers = await connection.query(queryGetMembers, [groupId]);
-      
-      console.log('log', responseGetMembers.rows)
       return responseGetMembers?.rows; 
     }catch(error){
       throw new InternalServerError('Cannot get member list');
