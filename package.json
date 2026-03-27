@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
+    "build": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -27,5 +28,10 @@
     "react-dom": "^18.3.1",
     "socket.io": "^4.8.1",
     "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.1.0",
+    "globals": "^17.4.0"
   }
 }

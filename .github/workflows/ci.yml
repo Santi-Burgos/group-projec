@@ -1,0 +1,32 @@
+
+name: CI/CD Build Check
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ] 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' 
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Verificar el Build
+        run: npm run build  
+
+      - name: Deploy to Render
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
